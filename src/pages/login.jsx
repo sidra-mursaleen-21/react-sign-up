@@ -7,24 +7,32 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function LogIn() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [userData, setUserData] = useState({});
 
   const navigate = useNavigate();
 
-  const logInWithEmail = () => {
+  const inputField = (key, value) => {
+    setUserData({ ...userData, [key]: value });
+
+  };
+  
+  // sign in existing user
+  
+  const logInWithEmail = (e) => {
+    e.preventDefault();
+    
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, userData.email, userData.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         // ...
-        navigate('/home')
+        navigate("/home");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        alert("you don't have any acount plz sign up");
+        alert("you don't have an acount plz sign up");
       });
   };
 
@@ -32,29 +40,35 @@ export default function LogIn() {
     <>
       <div className="maincontainer">
         <div className="container">
-          <h1>login</h1>
+          <form onSubmit={logInWithEmail}>
+            <h1>login</h1>
 
-          <Input
-            onChange={(e) => setEmail(e.target.value)}
-            label="email"
-            type="email"
-            placeholder="Type your email"
-          />
-          <br />
-          <br />
-          <Input
-          onChange={(e) => setPassword(e.target.value)}
-            label="password"
-            type="password"
-            placeholder="Type your password"
-          />
-          <Button onClick={() => logInWithEmail()} buttonText="log in" />
-          <p style={{ marginBottom: "20px" }} className="text">
-            or sign up using
-          </p>
-          <Link to="/" id="link2">
-            sign up
-          </Link>
+            <Input
+              id="email"
+              required={true}
+              onChange={(e) => inputField(e.target.id,e.target.value)}
+              label="email"
+              type="email"
+              placeholder="Type your email"
+            />
+            <br />
+            <br />
+            <Input
+              id="password"
+              required={true}
+              onChange={(e) => inputField(e.target.id,e.target.value)}
+              label="password"
+              type="password"
+              placeholder="Type your password"
+            />
+            <Button type="submit" buttonText="log in" />
+            <p style={{ marginBottom: "20px" }} className="text">
+              or sign up using
+            </p>
+            <Link to="/" id="link2">
+              sign up
+            </Link>
+          </form>
         </div>
       </div>
     </>

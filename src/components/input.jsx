@@ -7,8 +7,9 @@ export default function Input(props) {
         {props.label}
         <br />
         <input
+          id={props.id}
+          required={props.required}
           onChange={props.onChange}
-          required
           placeholder={props.placeholder}
           type={props.type}
         />
